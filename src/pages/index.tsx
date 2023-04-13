@@ -1,11 +1,18 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
+import Head from "next/head";
+import Image from "next/image";
+import { Inter } from "next/font/google";
+import styles from "@/styles/Home.module.css";
+import { Button } from "@nextui-org/react";
+import { useSayHelloHelloNameGet } from "@/api/default/default";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const name = useSayHelloHelloNameGet("World", {
+    query: {
+      suspense: true,
+    },
+  });
   return (
     <>
       <Head>
@@ -15,6 +22,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
+        <p>name.data: {name.data?.message}</p>
+        <Button>Test</Button>
         <div className={styles.description}>
           <p>
             Get started by editing&nbsp;
@@ -26,7 +35,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              By{' '}
+              By{" "}
               <Image
                 src="/vercel.svg"
                 alt="Vercel Logo"
@@ -103,12 +112,11 @@ export default function Home() {
               Deploy <span>-&gt;</span>
             </h2>
             <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
+              Instantly deploy your Next.js site to a shareable URL with&nbsp;Vercel.
             </p>
           </a>
         </div>
       </main>
     </>
-  )
+  );
 }
