@@ -2,13 +2,13 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { NextUIProvider } from "@nextui-org/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Axios } from "axios";
 import { useState, useEffect } from "react";
+import type { liff } from "@line/liff";
 
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
-  const [liffObject, setLiffObject] = useState(null);
+  const [liffObject, setLiffObject] = useState<typeof liff | null>(null);
   const [liffError, setLiffError] = useState(null);
 
   // Execute liff.init() when the app is initialized
@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
     import("@line/liff").then(({ default: liff }) => {
       console.log("start liff.init()...");
       liff
-        .init({ liffId: process.env.LIFF_ID })
+        .init({ liffId: process.env.LIFF_ID ?? "" })
         .then(() => {
           console.log("liff.init() done");
           setLiffObject(liff);
