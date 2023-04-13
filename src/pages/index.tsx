@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import { Button } from "@nextui-org/react";
 import { useSayHelloHelloNameGet } from "@/api/default/default";
+import { useLiff } from "@/libs/liff";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,6 +14,7 @@ export default function Home() {
       suspense: true,
     },
   });
+  const liff = useLiff();
   return (
     <>
       <Head>
@@ -24,7 +26,14 @@ export default function Home() {
       <main className={styles.main}>
         {/* @ts-ignore*/}
         <p>name.data: {name.data?.message}</p>
-        <Button>Test</Button>
+        <Button
+          onClick={() => {
+            liff?.login();
+          }}
+        >
+          {liff?.isLoggedIn() ? `Logout` : "Login"}
+        </Button>
+        <p>liffOrError: {liff != null ? liff.id : "not yet loaded"}</p>
         <div className={styles.description}>
           <p>
             Get started by editing&nbsp;
