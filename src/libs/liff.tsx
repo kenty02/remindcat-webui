@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import type { liff } from "@line/liff";
-import { AuthProvider } from "@/providers/auth";
+import { AuthProvider } from "../providers/auth";
 
 export const LiffContext = React.createContext<typeof liff | null>(null);
 export const LiffErrorContext = React.createContext<string | null>(null);
@@ -48,9 +48,9 @@ export function LiffProvider({ children }: { children: React.ReactNode }) {
     // to avoid `window is not defined` error
     import("@line/liff").then(({ default: liff }) => {
       console.log("start liff.init()...");
-      clearExpiredIdToken(process.env.NEXT_PUBLIC_LIFF_ID!);
+      clearExpiredIdToken(import.meta.env.VITE_PUBLIC_LIFF_ID!);
       liff
-        .init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID! })
+        .init({ liffId: import.meta.env.VITE_PUBLIC_LIFF_ID! })
         .then(() => {
           console.log("liff.init() done");
           setLiffObject(liff);

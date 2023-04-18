@@ -1,6 +1,6 @@
 import Axios, { AxiosRequestConfig } from "axios";
 
-export const AXIOS_INSTANCE = Axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL }); // use your own URL here or environment variable
+export const AXIOS_INSTANCE = Axios.create({ baseURL: import.meta.env.VITE_PUBLIC_API_URL }); // use your own URL here or environment variable
 export const customInstance = <T>(
   config: AxiosRequestConfig,
   options?: AxiosRequestConfig

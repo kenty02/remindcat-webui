@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import type { liff as liffType } from "@line/liff";
-import { loginLineLoginLinePost } from "@/api/default/default";
-import Axios from "axios";
-import { AXIOS_INSTANCE } from "@/api/custom-instance";
+import { loginLineLoginLinePost } from "../api/default/default";
+import { AXIOS_INSTANCE } from "../api/custom-instance";
 
 export const AuthProvider = ({
   children,
@@ -37,16 +36,13 @@ export const AuthProvider = ({
   }, [liff, liff?.isLoggedIn()]);
 
   const [token, setToken] = useState<string | null>(null);
+  const [axiosReady, setAxiosReady] = useState(false);
   useEffect(() => {
     console.log(token);
     if (!token) {
       return;
     }
-    console.log("setting interceptor");
     const interceptorId = AXIOS_INSTANCE.interceptors.request.use((config) => {
-      // if (config.url == null || !config.url.startsWith(process.env.NEXT_PUBLIC_API_URL!)) {
-      //   return config;
-      // }
       console.log("aaa");
       return {
         ...config,
@@ -58,13 +54,14 @@ export const AuthProvider = ({
           : config.headers,
       };
     });
+    setAxiosReady(true);
 
     return () => {
       AXIOS_INSTANCE.interceptors.request.eject(interceptorId);
     };
   }, [token]);
 
-  if (!token) {
+  if (!axiosReady) {
     return <div>logging in...</div>;
   }
   return <>{children}</>;
