@@ -5,15 +5,124 @@
  * OpenAPI spec version: 0.1.0
  */
 import { rest } from "msw";
+import { faker } from "@faker-js/faker";
+
+export const getReadRemindersMeRemindersMeGetMock = () =>
+  Array.from({ length: faker.datatype.number({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
+    line_to: faker.random.word(),
+    name: faker.random.word(),
+    time: `${faker.date.past().toISOString().split(".")[0]}Z`,
+    id: faker.datatype.number({ min: undefined, max: undefined }),
+  }));
+
+export const getReadHeroesHeroesGetMock = () =>
+  Array.from({ length: faker.datatype.number({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
+    name: faker.random.word(),
+    secret_name: faker.random.word(),
+    age: faker.helpers.arrayElement([
+      faker.datatype.number({ min: undefined, max: undefined }),
+      undefined,
+    ]),
+    id: faker.datatype.number({ min: undefined, max: undefined }),
+  }));
+
+export const getCreateHeroHeroesPostMock = () => ({
+  name: faker.random.word(),
+  secret_name: faker.random.word(),
+  age: faker.helpers.arrayElement([
+    faker.datatype.number({ min: undefined, max: undefined }),
+    undefined,
+  ]),
+  id: faker.datatype.number({ min: undefined, max: undefined }),
+});
+
+export const getReadHeroHeroesHeroIdGetMock = () => ({
+  name: faker.random.word(),
+  secret_name: faker.random.word(),
+  age: faker.helpers.arrayElement([
+    faker.datatype.number({ min: undefined, max: undefined }),
+    undefined,
+  ]),
+  id: faker.datatype.number({ min: undefined, max: undefined }),
+});
+
+export const getUpdateHeroHeroesHeroIdPatchMock = () => ({
+  name: faker.random.word(),
+  secret_name: faker.random.word(),
+  age: faker.helpers.arrayElement([
+    faker.datatype.number({ min: undefined, max: undefined }),
+    undefined,
+  ]),
+  id: faker.datatype.number({ min: undefined, max: undefined }),
+});
+
+export const getReadUsersMeUsersMeGetMock = () => ({
+  id: faker.random.word(),
+  name: faker.random.word(),
+});
+
+export const getLoginLineLoginLinePostMock = () => faker.random.word();
 
 export const getDefaultMSW = () => [
-  rest.get("*/", (_req, res, ctx) => {
+  rest.post("*/callback/line", (_req, res, ctx) => {
     return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
   }),
   rest.get("*/hello/:name", (_req, res, ctx) => {
     return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
   }),
-  rest.post("*/callback/line", (_req, res, ctx) => {
+  rest.get("*/reminders/me/", (_req, res, ctx) => {
+    return res(
+      ctx.delay(1000),
+      ctx.status(200, "Mocked status"),
+      ctx.json(getReadRemindersMeRemindersMeGetMock())
+    );
+  }),
+  rest.get("*/heroes/", (_req, res, ctx) => {
+    return res(
+      ctx.delay(1000),
+      ctx.status(200, "Mocked status"),
+      ctx.json(getReadHeroesHeroesGetMock())
+    );
+  }),
+  rest.post("*/heroes/", (_req, res, ctx) => {
+    return res(
+      ctx.delay(1000),
+      ctx.status(200, "Mocked status"),
+      ctx.json(getCreateHeroHeroesPostMock())
+    );
+  }),
+  rest.get("*/heroes/:heroId", (_req, res, ctx) => {
+    return res(
+      ctx.delay(1000),
+      ctx.status(200, "Mocked status"),
+      ctx.json(getReadHeroHeroesHeroIdGetMock())
+    );
+  }),
+  rest.delete("*/heroes/:heroId", (_req, res, ctx) => {
     return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
+  }),
+  rest.patch("*/heroes/:heroId", (_req, res, ctx) => {
+    return res(
+      ctx.delay(1000),
+      ctx.status(200, "Mocked status"),
+      ctx.json(getUpdateHeroHeroesHeroIdPatchMock())
+    );
+  }),
+  rest.get("*/users/me/", (_req, res, ctx) => {
+    return res(
+      ctx.delay(1000),
+      ctx.status(200, "Mocked status"),
+      ctx.json(getReadUsersMeUsersMeGetMock())
+    );
+  }),
+  rest.get("*/users/me/items/", (_req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
+  }),
+  rest.post("*/login/line", (_req, res, ctx) => {
+    return res(
+      ctx.delay(1000),
+      ctx.status(200, "Mocked status"),
+      ctx.json(getLoginLineLoginLinePostMock())
+    );
   }),
 ];

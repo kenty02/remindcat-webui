@@ -13,7 +13,16 @@ import type {
   UseQueryResult,
   QueryKey,
 } from "@tanstack/react-query";
-import type { HTTPValidationError } from ".././model";
+import type {
+  HTTPValidationError,
+  ReminderRead,
+  ReadRemindersMeRemindersMeGetParams,
+  HeroRead,
+  ReadHeroesHeroesGetParams,
+  HeroCreate,
+  HeroUpdate,
+  LineUser,
+} from ".././model";
 import { customInstance } from ".././custom-instance";
 
 // eslint-disable-next-line
@@ -25,52 +34,65 @@ type SecondParameter<T extends (...args: any) => any> = T extends (
   : never;
 
 /**
- * @summary Root
+ * @summary Line Callback
  */
-export const rootGet = (options?: SecondParameter<typeof customInstance>, signal?: AbortSignal) => {
-  return customInstance<unknown>({ url: `/`, method: "get", signal }, options);
+export const lineCallbackCallbackLinePost = (options?: SecondParameter<typeof customInstance>) => {
+  return customInstance<unknown>({ url: `/callback/line`, method: "post" }, options);
 };
 
-export const getRootGetQueryKey = () => [`/`] as const;
-
-export const getRootGetQueryOptions = <
-  TData = Awaited<ReturnType<typeof rootGet>>,
-  TError = unknown
+export const getLineCallbackCallbackLinePostMutationOptions = <
+  TError = HTTPValidationError,
+  TVariables = void,
+  TContext = unknown
 >(options?: {
-  query?: UseQueryOptions<Awaited<ReturnType<typeof rootGet>>, TError, TData>;
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof lineCallbackCallbackLinePost>>,
+    TError,
+    TVariables,
+    TContext
+  >;
   request?: SecondParameter<typeof customInstance>;
-}): UseQueryOptions<Awaited<ReturnType<typeof rootGet>>, TError, TData> & {
-  queryKey: QueryKey;
-} => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof lineCallbackCallbackLinePost>>,
+  TError,
+  TVariables,
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getRootGetQueryKey();
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof lineCallbackCallbackLinePost>>,
+    TVariables
+  > = () => {
+    return lineCallbackCallbackLinePost(requestOptions);
+  };
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof rootGet>>> = ({ signal }) =>
-    rootGet(requestOptions, signal);
-
-  return { queryKey, queryFn, ...queryOptions };
+  return { mutationFn, ...mutationOptions };
 };
 
-export type RootGetQueryResult = NonNullable<Awaited<ReturnType<typeof rootGet>>>;
-export type RootGetQueryError = unknown;
+export type LineCallbackCallbackLinePostMutationResult = NonNullable<
+  Awaited<ReturnType<typeof lineCallbackCallbackLinePost>>
+>;
 
-export const useRootGet = <
-  TData = Awaited<ReturnType<typeof rootGet>>,
-  TError = unknown
+export type LineCallbackCallbackLinePostMutationError = HTTPValidationError;
+
+export const useLineCallbackCallbackLinePost = <
+  TError = HTTPValidationError,
+  TVariables = void,
+  TContext = unknown
 >(options?: {
-  query?: UseQueryOptions<Awaited<ReturnType<typeof rootGet>>, TError, TData>;
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof lineCallbackCallbackLinePost>>,
+    TError,
+    TVariables,
+    TContext
+  >;
   request?: SecondParameter<typeof customInstance>;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getRootGetQueryOptions(options);
+}) => {
+  const mutationOptions = getLineCallbackCallbackLinePostMutationOptions(options);
 
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
+  return useMutation(mutationOptions);
 };
-
 /**
  * @summary Say Hello
  */
@@ -131,26 +153,531 @@ export const useSayHelloHelloNameGet = <
 };
 
 /**
- * @summary Line Callback
+ * @summary Read Reminders Me
  */
-export const lineCallbackCallbackLinePost = (options?: SecondParameter<typeof customInstance>) => {
-  return customInstance<unknown>({ url: `/callback/line`, method: "post" }, options);
+export const readRemindersMeRemindersMeGet = (
+  params?: ReadRemindersMeRemindersMeGetParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<ReminderRead[]>(
+    { url: `/reminders/me/`, method: "get", params, signal },
+    options
+  );
 };
 
-export const getLineCallbackCallbackLinePostMutationOptions = <
+export const getReadRemindersMeRemindersMeGetQueryKey = (
+  params?: ReadRemindersMeRemindersMeGetParams
+) => [`/reminders/me/`, ...(params ? [params] : [])] as const;
+
+export const getReadRemindersMeRemindersMeGetQueryOptions = <
+  TData = Awaited<ReturnType<typeof readRemindersMeRemindersMeGet>>,
+  TError = HTTPValidationError
+>(
+  params?: ReadRemindersMeRemindersMeGetParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof readRemindersMeRemindersMeGet>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+): UseQueryOptions<Awaited<ReturnType<typeof readRemindersMeRemindersMeGet>>, TError, TData> & {
+  queryKey: QueryKey;
+} => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getReadRemindersMeRemindersMeGetQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof readRemindersMeRemindersMeGet>>> = ({
+    signal,
+  }) => readRemindersMeRemindersMeGet(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions };
+};
+
+export type ReadRemindersMeRemindersMeGetQueryResult = NonNullable<
+  Awaited<ReturnType<typeof readRemindersMeRemindersMeGet>>
+>;
+export type ReadRemindersMeRemindersMeGetQueryError = HTTPValidationError;
+
+export const useReadRemindersMeRemindersMeGet = <
+  TData = Awaited<ReturnType<typeof readRemindersMeRemindersMeGet>>,
+  TError = HTTPValidationError
+>(
+  params?: ReadRemindersMeRemindersMeGetParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof readRemindersMeRemindersMeGet>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customInstance>;
+  }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getReadRemindersMeRemindersMeGetQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+/**
+ * @summary Read Heroes
+ */
+export const readHeroesHeroesGet = (
+  params?: ReadHeroesHeroesGetParams,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<HeroRead[]>({ url: `/heroes/`, method: "get", params, signal }, options);
+};
+
+export const getReadHeroesHeroesGetQueryKey = (params?: ReadHeroesHeroesGetParams) =>
+  [`/heroes/`, ...(params ? [params] : [])] as const;
+
+export const getReadHeroesHeroesGetQueryOptions = <
+  TData = Awaited<ReturnType<typeof readHeroesHeroesGet>>,
+  TError = HTTPValidationError
+>(
+  params?: ReadHeroesHeroesGetParams,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof readHeroesHeroesGet>>, TError, TData>;
+    request?: SecondParameter<typeof customInstance>;
+  }
+): UseQueryOptions<Awaited<ReturnType<typeof readHeroesHeroesGet>>, TError, TData> & {
+  queryKey: QueryKey;
+} => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getReadHeroesHeroesGetQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof readHeroesHeroesGet>>> = ({ signal }) =>
+    readHeroesHeroesGet(params, requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions };
+};
+
+export type ReadHeroesHeroesGetQueryResult = NonNullable<
+  Awaited<ReturnType<typeof readHeroesHeroesGet>>
+>;
+export type ReadHeroesHeroesGetQueryError = HTTPValidationError;
+
+export const useReadHeroesHeroesGet = <
+  TData = Awaited<ReturnType<typeof readHeroesHeroesGet>>,
+  TError = HTTPValidationError
+>(
+  params?: ReadHeroesHeroesGetParams,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof readHeroesHeroesGet>>, TError, TData>;
+    request?: SecondParameter<typeof customInstance>;
+  }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getReadHeroesHeroesGetQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+/**
+ * @summary Create Hero
+ */
+export const createHeroHeroesPost = (
+  heroCreate: HeroCreate,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<HeroRead>(
+    {
+      url: `/heroes/`,
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      data: heroCreate,
+    },
+    options
+  );
+};
+
+export const getCreateHeroHeroesPostMutationOptions = <
   TError = HTTPValidationError,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createHeroHeroesPost>>,
+    TError,
+    { data: HeroCreate },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createHeroHeroesPost>>,
+  TError,
+  { data: HeroCreate },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createHeroHeroesPost>>,
+    { data: HeroCreate }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createHeroHeroesPost(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateHeroHeroesPostMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createHeroHeroesPost>>
+>;
+export type CreateHeroHeroesPostMutationBody = HeroCreate;
+export type CreateHeroHeroesPostMutationError = HTTPValidationError;
+
+export const useCreateHeroHeroesPost = <
+  TError = HTTPValidationError,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createHeroHeroesPost>>,
+    TError,
+    { data: HeroCreate },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const mutationOptions = getCreateHeroHeroesPostMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+/**
+ * @summary Read Hero
+ */
+export const readHeroHeroesHeroIdGet = (
+  heroId: number,
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<HeroRead>({ url: `/heroes/${heroId}`, method: "get", signal }, options);
+};
+
+export const getReadHeroHeroesHeroIdGetQueryKey = (heroId: number) =>
+  [`/heroes/${heroId}`] as const;
+
+export const getReadHeroHeroesHeroIdGetQueryOptions = <
+  TData = Awaited<ReturnType<typeof readHeroHeroesHeroIdGet>>,
+  TError = HTTPValidationError
+>(
+  heroId: number,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof readHeroHeroesHeroIdGet>>, TError, TData>;
+    request?: SecondParameter<typeof customInstance>;
+  }
+): UseQueryOptions<Awaited<ReturnType<typeof readHeroHeroesHeroIdGet>>, TError, TData> & {
+  queryKey: QueryKey;
+} => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getReadHeroHeroesHeroIdGetQueryKey(heroId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof readHeroHeroesHeroIdGet>>> = ({
+    signal,
+  }) => readHeroHeroesHeroIdGet(heroId, requestOptions, signal);
+
+  return { queryKey, queryFn, enabled: !!heroId, ...queryOptions };
+};
+
+export type ReadHeroHeroesHeroIdGetQueryResult = NonNullable<
+  Awaited<ReturnType<typeof readHeroHeroesHeroIdGet>>
+>;
+export type ReadHeroHeroesHeroIdGetQueryError = HTTPValidationError;
+
+export const useReadHeroHeroesHeroIdGet = <
+  TData = Awaited<ReturnType<typeof readHeroHeroesHeroIdGet>>,
+  TError = HTTPValidationError
+>(
+  heroId: number,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof readHeroHeroesHeroIdGet>>, TError, TData>;
+    request?: SecondParameter<typeof customInstance>;
+  }
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getReadHeroHeroesHeroIdGetQueryOptions(heroId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+/**
+ * @summary Delete Hero
+ */
+export const deleteHeroHeroesHeroIdDelete = (
+  heroId: number,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<unknown>({ url: `/heroes/${heroId}`, method: "delete" }, options);
+};
+
+export const getDeleteHeroHeroesHeroIdDeleteMutationOptions = <
+  TError = HTTPValidationError,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteHeroHeroesHeroIdDelete>>,
+    TError,
+    { heroId: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteHeroHeroesHeroIdDelete>>,
+  TError,
+  { heroId: number },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteHeroHeroesHeroIdDelete>>,
+    { heroId: number }
+  > = (props) => {
+    const { heroId } = props ?? {};
+
+    return deleteHeroHeroesHeroIdDelete(heroId, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteHeroHeroesHeroIdDeleteMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteHeroHeroesHeroIdDelete>>
+>;
+
+export type DeleteHeroHeroesHeroIdDeleteMutationError = HTTPValidationError;
+
+export const useDeleteHeroHeroesHeroIdDelete = <
+  TError = HTTPValidationError,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteHeroHeroesHeroIdDelete>>,
+    TError,
+    { heroId: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const mutationOptions = getDeleteHeroHeroesHeroIdDeleteMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+/**
+ * @summary Update Hero
+ */
+export const updateHeroHeroesHeroIdPatch = (
+  heroId: number,
+  heroUpdate: HeroUpdate,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<HeroRead>(
+    {
+      url: `/heroes/${heroId}`,
+      method: "patch",
+      headers: { "Content-Type": "application/json" },
+      data: heroUpdate,
+    },
+    options
+  );
+};
+
+export const getUpdateHeroHeroesHeroIdPatchMutationOptions = <
+  TError = HTTPValidationError,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateHeroHeroesHeroIdPatch>>,
+    TError,
+    { heroId: number; data: HeroUpdate },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateHeroHeroesHeroIdPatch>>,
+  TError,
+  { heroId: number; data: HeroUpdate },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateHeroHeroesHeroIdPatch>>,
+    { heroId: number; data: HeroUpdate }
+  > = (props) => {
+    const { heroId, data } = props ?? {};
+
+    return updateHeroHeroesHeroIdPatch(heroId, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateHeroHeroesHeroIdPatchMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateHeroHeroesHeroIdPatch>>
+>;
+export type UpdateHeroHeroesHeroIdPatchMutationBody = HeroUpdate;
+export type UpdateHeroHeroesHeroIdPatchMutationError = HTTPValidationError;
+
+export const useUpdateHeroHeroesHeroIdPatch = <
+  TError = HTTPValidationError,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateHeroHeroesHeroIdPatch>>,
+    TError,
+    { heroId: number; data: HeroUpdate },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const mutationOptions = getUpdateHeroHeroesHeroIdPatchMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+/**
+ * @summary Read Users Me
+ */
+export const readUsersMeUsersMeGet = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<LineUser>({ url: `/users/me/`, method: "get", signal }, options);
+};
+
+export const getReadUsersMeUsersMeGetQueryKey = () => [`/users/me/`] as const;
+
+export const getReadUsersMeUsersMeGetQueryOptions = <
+  TData = Awaited<ReturnType<typeof readUsersMeUsersMeGet>>,
+  TError = unknown
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof readUsersMeUsersMeGet>>, TError, TData>;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryOptions<Awaited<ReturnType<typeof readUsersMeUsersMeGet>>, TError, TData> & {
+  queryKey: QueryKey;
+} => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getReadUsersMeUsersMeGetQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof readUsersMeUsersMeGet>>> = ({ signal }) =>
+    readUsersMeUsersMeGet(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions };
+};
+
+export type ReadUsersMeUsersMeGetQueryResult = NonNullable<
+  Awaited<ReturnType<typeof readUsersMeUsersMeGet>>
+>;
+export type ReadUsersMeUsersMeGetQueryError = unknown;
+
+export const useReadUsersMeUsersMeGet = <
+  TData = Awaited<ReturnType<typeof readUsersMeUsersMeGet>>,
+  TError = unknown
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof readUsersMeUsersMeGet>>, TError, TData>;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getReadUsersMeUsersMeGetQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+/**
+ * @summary Read Own Items
+ */
+export const readOwnItemsUsersMeItemsGet = (
+  options?: SecondParameter<typeof customInstance>,
+  signal?: AbortSignal
+) => {
+  return customInstance<unknown>({ url: `/users/me/items/`, method: "get", signal }, options);
+};
+
+export const getReadOwnItemsUsersMeItemsGetQueryKey = () => [`/users/me/items/`] as const;
+
+export const getReadOwnItemsUsersMeItemsGetQueryOptions = <
+  TData = Awaited<ReturnType<typeof readOwnItemsUsersMeItemsGet>>,
+  TError = unknown
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof readOwnItemsUsersMeItemsGet>>, TError, TData>;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryOptions<Awaited<ReturnType<typeof readOwnItemsUsersMeItemsGet>>, TError, TData> & {
+  queryKey: QueryKey;
+} => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getReadOwnItemsUsersMeItemsGetQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof readOwnItemsUsersMeItemsGet>>> = ({
+    signal,
+  }) => readOwnItemsUsersMeItemsGet(requestOptions, signal);
+
+  return { queryKey, queryFn, ...queryOptions };
+};
+
+export type ReadOwnItemsUsersMeItemsGetQueryResult = NonNullable<
+  Awaited<ReturnType<typeof readOwnItemsUsersMeItemsGet>>
+>;
+export type ReadOwnItemsUsersMeItemsGetQueryError = unknown;
+
+export const useReadOwnItemsUsersMeItemsGet = <
+  TData = Awaited<ReturnType<typeof readOwnItemsUsersMeItemsGet>>,
+  TError = unknown
+>(options?: {
+  query?: UseQueryOptions<Awaited<ReturnType<typeof readOwnItemsUsersMeItemsGet>>, TError, TData>;
+  request?: SecondParameter<typeof customInstance>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getReadOwnItemsUsersMeItemsGetQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+/**
+ * @summary Login Line
+ */
+export const loginLineLoginLinePost = (options?: SecondParameter<typeof customInstance>) => {
+  return customInstance<string>({ url: `/login/line`, method: "post" }, options);
+};
+
+export const getLoginLineLoginLinePostMutationOptions = <
+  TError = unknown,
   TVariables = void,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof lineCallbackCallbackLinePost>>,
+    Awaited<ReturnType<typeof loginLineLoginLinePost>>,
     TError,
     TVariables,
     TContext
   >;
   request?: SecondParameter<typeof customInstance>;
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof lineCallbackCallbackLinePost>>,
+  Awaited<ReturnType<typeof loginLineLoginLinePost>>,
   TError,
   TVariables,
   TContext
@@ -158,35 +685,35 @@ export const getLineCallbackCallbackLinePostMutationOptions = <
   const { mutation: mutationOptions, request: requestOptions } = options ?? {};
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof lineCallbackCallbackLinePost>>,
+    Awaited<ReturnType<typeof loginLineLoginLinePost>>,
     TVariables
   > = () => {
-    return lineCallbackCallbackLinePost(requestOptions);
+    return loginLineLoginLinePost(requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
 };
 
-export type LineCallbackCallbackLinePostMutationResult = NonNullable<
-  Awaited<ReturnType<typeof lineCallbackCallbackLinePost>>
+export type LoginLineLoginLinePostMutationResult = NonNullable<
+  Awaited<ReturnType<typeof loginLineLoginLinePost>>
 >;
 
-export type LineCallbackCallbackLinePostMutationError = HTTPValidationError;
+export type LoginLineLoginLinePostMutationError = unknown;
 
-export const useLineCallbackCallbackLinePost = <
-  TError = HTTPValidationError,
+export const useLoginLineLoginLinePost = <
+  TError = unknown,
   TVariables = void,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof lineCallbackCallbackLinePost>>,
+    Awaited<ReturnType<typeof loginLineLoginLinePost>>,
     TError,
     TVariables,
     TContext
   >;
   request?: SecondParameter<typeof customInstance>;
 }) => {
-  const mutationOptions = getLineCallbackCallbackLinePostMutationOptions(options);
+  const mutationOptions = getLoginLineLoginLinePostMutationOptions(options);
 
   return useMutation(mutationOptions);
 };

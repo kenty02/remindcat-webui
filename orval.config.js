@@ -1,6 +1,6 @@
 module.exports = {
   fastapi: {
-    input: { target: "http://localhost:8000/openapi.json" },
+    input: { target: "http://localhost:9002/openapi.json" },
     output: {
       mode: "tags-split",
       target: "src/api/client.ts",
