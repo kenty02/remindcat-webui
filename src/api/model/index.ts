@@ -15,3 +15,4 @@ export * from "./readRemindersMeRemindersMeGetParams";
 export * from "./reminderRead";
 export * from "./validationError";
 export * from "./validationErrorLocItem";
+export * from "./readRemindersMeRemindersMeDeleteParams";

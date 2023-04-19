@@ -1,10 +1,12 @@
-// import { Stack } from "@mantine/core";
-// placeholder
-const Stack = ({ children }: { children: React.ReactNode }) => {
-  return <div>{children}</div>;
-};
-import { useReadRemindersMeRemindersMeGet } from "../api/default/default";
+import { ActionIcon, Flex, Stack, Text } from "@mantine/core";
+import {
+  getReadRemindersMeRemindersMeGetQueryKey,
+  useReadRemindersMeRemindersMeDelete,
+  useReadRemindersMeRemindersMeGet,
+} from "../api/default/default";
 import { ReminderRead } from "../api/model";
+import { Trash } from "tabler-icons-react";
+import { queryClient } from "../main";
 
 export default (): JSX.Element => {
   const remindersQuery = useReadRemindersMeRemindersMeGet(undefined, { query: { suspense: true } });
@@ -21,11 +23,37 @@ export default (): JSX.Element => {
 const ReminderItem = ({ reminder }: { reminder: ReminderRead }) => {
   const time = new Date(reminder.time);
   const timeString = time.toLocaleString();
+  const { mutate: deleteMutate } = useReadRemindersMeRemindersMeDelete({
+    mutation: {
+      onMutate: () => {
+        const queryKey = getReadRemindersMeRemindersMeGetQueryKey();
+        const previousValue = queryClient.getQueryData(queryKey);
+        queryClient.setQueryData<ReminderRead[]>(queryKey, (old) => {
+          return old?.filter((reminder) => reminder.id !== reminder.id);
+        });
+        return { previousValue };
+      },
+      onSettled: () => {
+        const queryKey = getReadRemindersMeRemindersMeGetQueryKey();
+        queryClient.invalidateQueries(queryKey);
+      },
+    },
+  });
+
+  const handleDelete = () => {
+    deleteMutate({ params: { id: reminder.id } });
+  };
   return (
     <div key={reminder.id}>
-      <p>
-        {reminder.name}@{timeString}
-      </p>
+      <Flex>
+        <Text size={"md"}>
+          {reminder.name}@{timeString}
+        </Text>
+        {/*delete button*/}
+        <ActionIcon onClick={handleDelete}>
+          <Trash />
+        </ActionIcon>
+      </Flex>
     </div>
   );
 };

@@ -4,24 +4,25 @@
  * FastAPI
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery, useMutation } from "@tanstack/react-query";
 import type {
-  UseQueryOptions,
-  UseMutationOptions,
-  QueryFunction,
   MutationFunction,
-  UseQueryResult,
+  QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseQueryOptions,
+  UseQueryResult,
 } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
-  HTTPValidationError,
-  ReminderRead,
-  ReadRemindersMeRemindersMeGetParams,
-  HeroRead,
-  ReadHeroesHeroesGetParams,
   HeroCreate,
+  HeroRead,
   HeroUpdate,
+  HTTPValidationError,
   LineUser,
+  ReadHeroesHeroesGetParams,
+  ReadRemindersMeRemindersMeDeleteParams,
+  ReadRemindersMeRemindersMeGetParams,
+  ReminderRead,
 } from ".././model";
 import { customInstance } from ".././custom-instance";
 
@@ -225,6 +226,69 @@ export const useReadRemindersMeRemindersMeGet = <
   return query;
 };
 
+/**
+ * @summary Read Reminders Me
+ */
+export const readRemindersMeRemindersMeDelete = (
+  params: ReadRemindersMeRemindersMeDeleteParams,
+  options?: SecondParameter<typeof customInstance>
+) => {
+  return customInstance<unknown>({ url: `/reminders/me/`, method: "delete", params }, options);
+};
+
+export const getReadRemindersMeRemindersMeDeleteMutationOptions = <
+  TError = HTTPValidationError,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof readRemindersMeRemindersMeDelete>>,
+    TError,
+    { params: ReadRemindersMeRemindersMeDeleteParams },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof readRemindersMeRemindersMeDelete>>,
+  TError,
+  { params: ReadRemindersMeRemindersMeDeleteParams },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof readRemindersMeRemindersMeDelete>>,
+    { params: ReadRemindersMeRemindersMeDeleteParams }
+  > = (props) => {
+    const { params } = props ?? {};
+
+    return readRemindersMeRemindersMeDelete(params, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ReadRemindersMeRemindersMeDeleteMutationResult = NonNullable<
+  Awaited<ReturnType<typeof readRemindersMeRemindersMeDelete>>
+>;
+
+export type ReadRemindersMeRemindersMeDeleteMutationError = HTTPValidationError;
+
+export const useReadRemindersMeRemindersMeDelete = <
+  TError = HTTPValidationError,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof readRemindersMeRemindersMeDelete>>,
+    TError,
+    { params: ReadRemindersMeRemindersMeDeleteParams },
+    TContext
+  >;
+  request?: SecondParameter<typeof customInstance>;
+}) => {
+  const mutationOptions = getReadRemindersMeRemindersMeDeleteMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
 /**
  * @summary Read Heroes
  */

@@ -77,6 +77,9 @@ export const getDefaultMSW = () => [
       ctx.json(getReadRemindersMeRemindersMeGetMock())
     );
   }),
+  rest.delete("*/reminders/me/", (_req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
+  }),
   rest.get("*/heroes/", (_req, res, ctx) => {
     return res(
       ctx.delay(1000),
